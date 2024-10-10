@@ -7,8 +7,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
+import useUserProfileStore from "../store/userProfileStore";
 
 const ProfileHeader = () => {
+  const {userProfile} = useUserProfileStore()
   return (
     <Flex
       gap={{ base: 4, sm: 10 }}
@@ -21,7 +23,7 @@ const ProfileHeader = () => {
         alignSelf={"flex-start"}
         mx={"auto"}
       >
-        <Avatar name="Yugji" src="/profilepic.png" alt="yugji" />
+        <Avatar src={userProfile.profilePicURL} alt="yugji" />
       </AvatarGroup>
       <VStack alignItems={"start"} gap={2} mx={"auto"} flex={1}>
         <Flex
@@ -31,7 +33,7 @@ const ProfileHeader = () => {
           alignItems={"center"}
           w={"full"}
         >
-          <Text fontSize={{ base: "sm", md: "lg" }}>yugji_</Text>
+          <Text fontSize={{ base: "sm", md: "lg" }}>{userProfile.username}</Text>
           <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
             <Button
               bg={"white"}
@@ -46,29 +48,29 @@ const ProfileHeader = () => {
         <Flex alignItems={"center"} gap={{ base: 2, sm: 4 }}>
           <Text fontSize={{base:"xs", md:"sm"}}>
             <Text as={"span"} fontWeight={"bold"} mr={1}>
-              4
+              {userProfile.posts.length}
             </Text>
             Posts
           </Text>
           <Text fontSize={{base:"xs", md:"sm"}}>
             <Text as={"span"} fontWeight={"bold"} mr={1}>
-              150
+              {userProfile.followers.length}
             </Text>
             Followers
           </Text>
           <Text fontSize={{base:"xs", md:"sm"}}>
             <Text as={"span"} fontWeight={"bold"} mr={1}>
-              210
+              {userProfile.following.length}
             </Text>
             Following
           </Text>
         </Flex>
         <Flex alignItems={"center"} gap={4}>
           <Text fontSize={"sm"} fontWeight={"bold"}>
-            Sahil Singh
+            {userProfile.fullName}
           </Text>
         </Flex>
-        <Text fontSize={"sm"}> viva la vida</Text>
+        <Text fontSize={"sm"}> {userProfile.bio}</Text>
       </VStack>
     </Flex>
   );
