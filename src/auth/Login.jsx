@@ -8,7 +8,7 @@ const Login = () => {
     password: "",
   });
 
-  const {loading, error, login} = useLogin()
+  const { loading, error, login } = useLogin();
 
   return (
     <>

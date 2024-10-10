@@ -6,18 +6,20 @@ import useAuthStore from "../store/authStore";
 const SuggestedHeader = () => {
   const {handleLogout, isLoggingOut} = useLogout()
   const authUser = useAuthStore((state) => state.user)
+
+  if(!authUser) return null
   return (
     <Flex justifyContent={"space-between"} alignItems={"center"} w={"full"}>
       <Flex alignItems={"center"} gap={2}>
         <Link to={`${authUser.username}`}>
-          <Avatar size={"md"} src={authUser.profilepicURL} />
+          <Avatar size={"md"} src={authUser.profilePicURL} />
         </Link>
 
-        <Link to={`${authUser.username}`}>
+        <Link to={`${authUser.usrname}`}>
           <Text fontSize={12} fontWeight={"bold"}>
             {authUser.username}
           </Text>
-        </Link>
+        </Link> 
       </Flex>
       <Button
         onClick={handleLogout}
