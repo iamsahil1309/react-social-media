@@ -1,23 +1,40 @@
 import { auth, db } from "../../firebase";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import useShowToast from "./useShowToast";
+import useAuthStore from "../store/authStore";
 
 const useSignUpWithEmailAndPassword = () => {
-  const [createUserWithEmailAndPassword, loading, error] =
+  const [createUserWithEmailAndPassword, , loading, error] =
     useCreateUserWithEmailAndPassword(auth);
-
   const showToast = useShowToast();
+  const loginUser = useAuthStore((state) => state.login);
 
-  const signUp = async (inputs) => {
+  const signup = async (inputs) => {
     if (
       !inputs.email ||
       !inputs.password ||
       !inputs.username ||
       !inputs.fullName
     ) {
-      showToast("Error", "Please fill all the fields!", "error");
+      showToast("Error", "Please fill all the fields", "error");
       return;
+    }
+
+    const usersRef = collection(db,"users")
+    const q = query(usersRef, where("username", "==", inputs.username ))
+    const querySnapshot = await getDocs(q)
+
+    if(!querySnapshot.empty) {
+      showToast("Error", "Username already exist", "error")
+      return
     }
 
     try {
@@ -26,7 +43,7 @@ const useSignUpWithEmailAndPassword = () => {
         inputs.password
       );
       if (!newUser && error) {
-        showToast("Error",error.message, "error");
+        showToast("Error", error.message, "error");
         return;
       }
       if (newUser) {
@@ -43,15 +60,15 @@ const useSignUpWithEmailAndPassword = () => {
           createdAt: Date.now(),
         };
         await setDoc(doc(db, "users", newUser.user.uid), userDoc);
-        // console.log(userDoc);
         localStorage.setItem("user-info", JSON.stringify(userDoc));
+        loginUser(userDoc);
       }
     } catch (error) {
       showToast("Error", error.message, "error");
     }
   };
 
-  return { loading, error, signUp };
+  return { loading, error, signup };
 };
 
 export default useSignUpWithEmailAndPassword;

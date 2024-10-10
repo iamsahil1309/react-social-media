@@ -18,46 +18,44 @@ const Signup = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-
-  const { loading, error, signUp } = useSignUpWithEmailAndPassword();
+  const { loading, error, signup } = useSignUpWithEmailAndPassword();
 
   return (
     <>
       <Input
         placeholder="Email"
-        type="email"
         fontSize={14}
+        type="email"
         size={"sm"}
         value={inputs.email}
         onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
       />
       <Input
         placeholder="Username"
-        type="text"
         fontSize={14}
+        type="text"
         size={"sm"}
         value={inputs.username}
         onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
       />
       <Input
         placeholder="Full Name"
-        type="text"
         fontSize={14}
+        type="text"
         size={"sm"}
         value={inputs.fullName}
         onChange={(e) => setInputs({ ...inputs, fullName: e.target.value })}
       />
-
       <InputGroup>
         <Input
           placeholder="Password"
-          type={showPassword ? "text" : "password"}
           fontSize={14}
-          size={"sm"}
+          type={showPassword ? "text" : "password"}
           value={inputs.password}
+          size={"sm"}
           onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
         />
-        <InputRightElement h={"full"}>
+        <InputRightElement h="full">
           <Button
             variant={"ghost"}
             size={"sm"}
@@ -76,14 +74,14 @@ const Signup = () => {
       )}
 
       <Button
-        isLoading={loading}
-        onClick={() => signUp(inputs)}
         w={"full"}
         colorScheme="blue"
         size={"sm"}
         fontSize={14}
+        isLoading={loading}
+        onClick={() => signup(inputs)}
       >
-        Sign up
+        Sign Up
       </Button>
     </>
   );
