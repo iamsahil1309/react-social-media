@@ -35,6 +35,7 @@ const CreatePost = () => {
 	const imageRef = useRef(null)
 	const { handleImageChange, selectedFile, setSelectedFile } = usePreviewImg();
 	const {isLoading, handleCreatePost} = useCreatePost()
+	const showToast = useShowToast()
 
 	const handlePostCreation = async() => {
 		try {

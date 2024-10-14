@@ -6,7 +6,9 @@ const usePostStore = create((set) => ({
     //update the number of posts in profile page
     addPost : (post) => set(state => ({
         userProfile : {...state.userProfile, posts: [post.id, ...state.userProfile.posts]}
-    }))
+    })),
+
+    setPosts : (posts) => set({posts}) 
 }))
 
 export default usePostStore
