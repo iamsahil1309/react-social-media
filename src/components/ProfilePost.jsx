@@ -21,11 +21,44 @@ import Comment from "./Comment";
 import PostFooter from './PostFooter'
 import useUserProfileStore from "../store/userProfileStore";
 import useAuthStore from "../store/authStore";
+import useShowToast from "../hooks/useShowToast";
+import { useState } from "react";
+import { deleteObject, ref } from "firebase/storage";
+import { db, storage } from "../../firebase";
+import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import usePostStore from "../store/postStore";
 
 const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const userProfile = useUserProfileStore(state => state.userProfile)
   const authUser = useAuthStore(state => state.user)
+  const showToast = useShowToast()
+  const [isDeleting, setIsDeleting] = useState(false)
+  const deletePost = usePostStore(state => state.deletePosts)
+
+  const handleDeletePost = async() => {
+    if(!window.confirm("Are you sure, You want to delte this post?")) return
+
+    if(isDeleting) return
+
+    try {
+      const imageRef = ref(storage, `posts/${post.id}`)
+      await deleteObject(imageRef)
+      const userRef = doc(db, "users", authUser.uid)
+      await deleteDoc(doc(db, "posts", post.id))
+      await updateDoc(userRef, {
+        posts: arrayRemove(post.id)
+      })
+
+      deletePost(post.id)
+      showToast("Success", "Post deleted successfully!", "success")
+
+    } catch (error) {
+      showToast("Error", error.message, "error")
+    } finally {
+      setIsDeleting(false)
+    }
+  }
   return (
     <>
       <GridItem
@@ -128,6 +161,8 @@ const ProfilePost = ({ post }) => {
                       _hover={{ bg: "whiteAlpha.300", color: "red.600" }}
                       borderRadius={4}
                       p={1}
+                      onClick={handleDeletePost}
+                      isLoading={isDeleting}
                     >
                       <MdDelete size={20} cursor={"pointer"} />
                     </Button>
