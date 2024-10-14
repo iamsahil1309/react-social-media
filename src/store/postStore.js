@@ -12,7 +12,7 @@ const usePostStore = create((set) => ({
         posts: [post.id, ...state.userProfile.posts],
       },
     })),
-    
+
   deletePosts: (id) =>
     set((state) => ({ posts: state.posts.filter((post) => post.id !== id) })),
 
