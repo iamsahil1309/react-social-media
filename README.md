@@ -47,6 +47,13 @@ To get a local copy up and running, follow these steps:
 2. **Navigate to the project directory:**:
     ```bash
      cd instagram-clone
+    
+3. **Install dependencies:**
+   ```bash
+    npm install
+4. **Set up Firebase:**
+    Create a Firebase project and set up Firestore and Authentication.
+    Replace the Firebase configuration in src/firebase.js with your project's configuration.  
 
 
    
