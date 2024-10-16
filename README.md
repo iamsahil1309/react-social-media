@@ -51,9 +51,7 @@ To get a local copy up and running, follow these steps:
 3. **Install dependencies:**
    ```bash
     npm install
-4. **Set up Firebase:**
-   <li> Create a Firebase project and set up Firestore and Authentication.</li>
-   <li>  Replace the Firebase configuration in src/firebase.js with your project's configuration.  </li>
+
 
 
    
