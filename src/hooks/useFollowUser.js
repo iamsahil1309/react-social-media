@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "../store/authStore";
 import useUserProfileStore from "../store/userProfileStore";
 import useShowToast from "./useShowToast";
@@ -17,24 +17,23 @@ const useFollowUser = (userId) => {
     setIsUpdating(true);
     try {
       const currentUserRef = doc(db, "users", authUser.uid);
-      const userToFollowOrUnfollowRef = doc(db, "users", userId);
-
+      const userToFollowOrUnfollorRef = doc(db, "users", userId);
       await updateDoc(currentUserRef, {
         following: isFollowing ? arrayRemove(userId) : arrayUnion(userId),
       });
 
-      await updateDoc(userToFollowOrUnfollowRef, {
+      await updateDoc(userToFollowOrUnfollorRef, {
         followers: isFollowing
           ? arrayRemove(authUser.uid)
           : arrayUnion(authUser.uid),
       });
 
       if (isFollowing) {
+        // unfollow
         setAuthUser({
           ...authUser,
           following: authUser.following.filter((uid) => uid !== userId),
         });
-
         if (userProfile)
           setUserProfile({
             ...userProfile,
@@ -44,7 +43,7 @@ const useFollowUser = (userId) => {
           });
 
         localStorage.setItem(
-          "user-Info",
+          "user-info",
           JSON.stringify({
             ...authUser,
             following: authUser.following.filter((uid) => uid !== userId),
@@ -52,7 +51,7 @@ const useFollowUser = (userId) => {
         );
         setIsFollowing(false);
       } else {
-        //follow
+        // follow
         setAuthUser({
           ...authUser,
           following: [...authUser.following, userId],
@@ -61,7 +60,7 @@ const useFollowUser = (userId) => {
         if (userProfile)
           setUserProfile({
             ...userProfile,
-            followers: [...userProfile.followers, authUser.id],
+            followers: [...userProfile.followers, authUser.uid],
           });
 
         localStorage.setItem(
@@ -81,8 +80,10 @@ const useFollowUser = (userId) => {
   };
 
   useEffect(() => {
-    const isFollowing = authUser.following.includes(userId);
-    setIsFollowing(isFollowing);
+    if (authUser) {
+      const isFollowing = authUser.following.includes(userId);
+      setIsFollowing(isFollowing);
+    }
   }, [authUser, userId]);
 
   return { isUpdating, isFollowing, handleFollowUser };
