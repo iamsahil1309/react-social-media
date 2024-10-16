@@ -1,6 +1,8 @@
 # Instagram Clone
 
-![Instagram Clone](https://via.placeholder.com/800x400.png?text=Instagram+Clone)
+![Screenshot (15)](https://github.com/user-attachments/assets/665c9cdd-4770-4138-a298-a11f30de2ec1)
+
+
 
 An Instagram clone built with React, Firebase, Chakra UI, Zustand, and React Router DOM. This project showcases the core functionalities of a social media platform, allowing users to share posts, follow friends, and interact with content.
 
