@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Skeleton, SkeletonCircle, VStack } from '@chakra-ui/react'
+import { Box, Container,Text, Flex, Skeleton, SkeletonCircle, VStack } from '@chakra-ui/react'
 import FeedPost from './FeedPost'
 import useGetFeedPosts from '../hooks/useGetFeedPosts'
 
@@ -25,6 +25,15 @@ const Feeds = () => {
         ))}
        
       {!isLoaing && posts.length > 0 && posts.map((post) => <FeedPost key={post.id} post = {post} />)}
+
+      {!isLoaing && posts.length === 0 && (
+        <>
+        <Text fontSize={"md"} color={"red.400"}>
+            Damnn, Looks like you don&apos;t have any friends.
+        </Text>
+        <Text color={"red.400"}>Stop Coding and go make some!</Text>
+        </>
+      )}
     
     </Container>
   )

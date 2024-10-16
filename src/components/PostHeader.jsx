@@ -1,6 +1,6 @@
 import {
   Avatar,
-  Text,
+  Button,
   Box,
   Flex,
   Skeleton,
@@ -8,8 +8,13 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
+import useFollowUser from "../hooks/useFollowUser";
 
 const PostHeader = ({ post, creatorProfile }) => {
+  const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(
+    post.createdBy
+  );
+
   return (
     <Flex
       justifyContent={"space-between"}
@@ -39,15 +44,19 @@ const PostHeader = ({ post, creatorProfile }) => {
         </Flex>
       </Flex>
       <Box cursor={"pointer"}>
-        <Text
+        <Button
+          size={"xs"}
+          bg={"transparent"}
           fontSize={12}
           color={"blue.500"}
           fontWeight={"bold"}
           _hover={{ color: "white" }}
           transition={"0.2s ease-in-out"}
+          onClick={handleFollowUser}
+          isLoading={isUpdating}
         >
-          unfollow
-        </Text>
+          {isFollowing ? "Unfollow" : "Follow"}
+        </Button>
       </Box>
     </Flex>
   );
