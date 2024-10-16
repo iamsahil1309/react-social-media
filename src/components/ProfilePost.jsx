@@ -31,44 +31,43 @@ import Caption from "./Caption";
 
 const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const userProfile = useUserProfileStore(state => state.userProfile)
-  const authUser = useAuthStore(state => state.user)
-  const showToast = useShowToast()
-  const [isDeleting, setIsDeleting] = useState(false)
-  const deletePost = usePostStore(state => state.deletePosts)
-  const deletePostCount = useUserProfileStore(state => state.deletePost)
+  const userProfile = useUserProfileStore((state) => state.userProfile);
+  const authUser = useAuthStore((state) => state.user);
+  const showToast = useShowToast();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deletePost = usePostStore((state) => state.deletePost);
+  const decrementPostsCount = useUserProfileStore((state) => state.deletePost);
 
-  const handleDeletePost = async() => {
-    if(!window.confirm("Are you sure, You want to delte this post?")) return
-
-    if(isDeleting) return
+  const handleDeletePost = async () => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    if (isDeleting) return;
 
     try {
-      const imageRef = ref(storage, `posts/${post.id}`)
-      await deleteObject(imageRef)
-      const userRef = doc(db, "users", authUser.uid)
-      await deleteDoc(doc(db, "posts", post.id))
+      const imageRef = ref(storage, `posts/${post.id}`);
+      await deleteObject(imageRef);
+      const userRef = doc(db, "users", authUser.uid);
+      await deleteDoc(doc(db, "posts", post.id));
+
       await updateDoc(userRef, {
-        posts: arrayRemove(post.id)
-      })
+        posts: arrayRemove(post.id),
+      });
 
-      deletePost(post.id)
-      deletePostCount(post.id)
-      showToast("Success", "Post deleted successfully!", "success")
-
+      deletePost(post.id);
+      decrementPostsCount(post.id);
+      showToast("Success", "Post deleted successfully", "success");
     } catch (error) {
-      showToast("Error", error.message, "error")
+      showToast("Error", error.message, "error");
     } finally {
-      setIsDeleting(false)
+      setIsDeleting(false);
     }
-  }
+  };
   return (
     <>
       <GridItem
         cursor={"pointer"}
         borderRadius={4}
         overflow={"hidden"}
-        border={"1px solid "}
+        border={"1px solid"}
         borderColor={"whiteAlpha.300"}
         position={"relative"}
         aspectRatio={1 / 1}
@@ -80,20 +79,21 @@ const ProfilePost = ({ post }) => {
           position={"absolute"}
           top={0}
           left={0}
-          bottom={0}
           right={0}
+          bottom={0}
           bg={"blackAlpha.700"}
           transition={"all 0.3s ease"}
           zIndex={1}
           justifyContent={"center"}
         >
-          <Flex justifyContent={"center"} alignItems={"center"} gap={50}>
+          <Flex alignItems={"center"} justifyContent={"center"} gap={50}>
             <Flex>
               <AiFillHeart size={20} />
               <Text fontWeight={"bold"} ml={2}>
                 {post.likes.length}
               </Text>
             </Flex>
+
             <Flex>
               <FaComment size={20} />
               <Text fontWeight={"bold"} ml={2}>
@@ -105,7 +105,7 @@ const ProfilePost = ({ post }) => {
 
         <Image
           src={post.imageURL}
-          alt="profilepost"
+          alt="profile post"
           w={"100%"}
           h={"100%"}
           objectFit={"cover"}
@@ -123,7 +123,7 @@ const ProfilePost = ({ post }) => {
           <ModalCloseButton />
           <ModalBody bg={"black"} pb={5}>
             <Flex
-              gap={4}
+              gap="4"
               w={{ base: "90%", sm: "70%", md: "full" }}
               mx={"auto"}
               maxH={"90vh"}
@@ -138,11 +138,11 @@ const ProfilePost = ({ post }) => {
                 justifyContent={"center"}
                 alignItems={"center"}
               >
-                <Image src={post.imageURL} alt="profilepic" />
+                <Image src={post.imageURL} alt="profile post" />
               </Flex>
               <Flex
                 flex={1}
-                flexDirection={"column"}
+                flexDir={"column"}
                 px={10}
                 display={{ base: "none", md: "flex" }}
               >
@@ -151,12 +151,13 @@ const ProfilePost = ({ post }) => {
                     <Avatar
                       src={userProfile.profilePicURL}
                       size={"sm"}
-                      name="Sahil Singh"
+                      name="As a Programmer"
                     />
                     <Text fontWeight={"bold"} fontSize={12}>
                       {userProfile.username}
                     </Text>
                   </Flex>
+
                   {authUser?.uid === userProfile.uid && (
                     <Button
                       size={"sm"}
@@ -167,26 +168,27 @@ const ProfilePost = ({ post }) => {
                       onClick={handleDeletePost}
                       isLoading={isDeleting}
                     >
-                      <MdDelete size={20} cursor={"pointer"} />
+                      <MdDelete size={20} cursor="pointer" />
                     </Button>
                   )}
                 </Flex>
                 <Divider my={4} bg={"gray.500"} />
 
                 <VStack
-                  w={"full"}
+                  w="full"
                   alignItems={"start"}
                   maxH={"350px"}
                   overflowY={"auto"}
                 >
                   {/* CAPTION */}
                   {post.caption && <Caption post={post} />}
-                  {/* COMMENT */}
-                  {post.comments.map(comment => (
+                  {/* COMMENTS */}
+                  {post.comments.map((comment) => (
                     <Comment key={comment.id} comment={comment} />
                   ))}
                 </VStack>
-                <Divider my={4} bg={"gray.800"} />
+                <Divider my={4} bg={"gray.8000"} />
+
                 <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>
