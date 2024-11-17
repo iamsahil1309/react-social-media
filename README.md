@@ -4,7 +4,7 @@
 
 
 
-An Instagram clone built with React, Firebase, Chakra UI, Zustand, and React Router DOM. This project showcases the core functionalities of a social media platform, allowing users to share posts, follow friends, and interact with content.
+An Instagram clone built with React, Firebase, Chakra UI, Zustand, and React Router DOM. This project showcases the core functionalities of a social media platform, allowing users to share posts, like and comment, follow friends, and interact with content.
 
 ## Table of Contents
 
